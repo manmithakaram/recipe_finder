@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Recipe Finder</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Recipe Finder</h1>
+        <form method="POST" action="/">
+            <input type="text" name="ingredients" placeholder="Enter ingredients separated by commas" required>
+            <button type="submit">Find Recipes</button>
+        </form>
+        
+        {% if recipes %}
+            <h2>Matching Recipes:</h2>
+            <ul>
+                {% for recipe in recipes %}
+                    <li>{{ recipe }}</li> <!-- Directly show the recipe title -->
+                {% endfor %}
+            </ul>
+            <form method="POST" action="/get_instructions"> <!-- Changed the action to point to the correct route -->
+                <input type="hidden" name="ingredients" value="{{ request.form['ingredients'] }}">
+                <input type="text" name="recipe_title" placeholder="Enter recipe title" required>
+                <button type="submit">Get Instructions</button>
+            </form>
+        {% endif %}
+
+        {% if instructions %}
+            <h2>Instructions:</h2>
+            <p>{{ instructions }}</p>
+            {% if image_url %}
+                <img src="{{ image_url }}" alt="Recipe Image">
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>
